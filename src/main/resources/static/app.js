@@ -13,6 +13,37 @@ function setConnected(connected) {
 }
 
 function connect() {
+	
+	axios.post('/configure', {
+		address: "169.254.1.1",
+		antennaConfigurationGroup: {
+			antennaConfigs: [
+				{
+					portNumber: 1,
+					maxRxSensitivity: true,
+					rxSensitivityInDbm: 40,
+					maxTxPower: true,
+					txPowerInDbm: 90,
+				}
+			]
+		},
+		reportConfig: {
+			mode: 'Individual',
+		},
+		readerMode: 'AutoSetDenseReader',		
+	})
+	  .then(function (response) {
+	    // handle success
+	    console.log(response);
+	  })
+	  .catch(function (error) {
+	    // handle error
+	    console.log(error);
+	  })
+	  .then(function () {
+	    // always executed
+	  });
+	
     var socket = new SockJS('/impinj');
     stompClient = Stomp.over(socket);
     stompClient.connect({
@@ -21,10 +52,9 @@ function connect() {
     }, function (frame) {
         setConnected(true);
         console.log('Connected: ' + frame);
-        stompClient.subscribe('/impinj/tags', function (greeting) {
-            showGreeting(JSON.parse(greeting.body).content);
-            console.log('message received', greeting);
-        });
+        stompClient.subscribe('/impinj/169.254.1.1', function (greeting) {
+            console.log('message received', JSON.parse(greeting.body));
+        });        
     });
 }
 

@@ -10,15 +10,18 @@ import com.impinj.octane.Tag;
 import com.impinj.octane.TagReport;
 import com.impinj.octane.TagReportListener;
 
+import br.selftron.impinj.bridge.dto.ReaderConfigurationDTO;
 import br.selftron.impinj.bridge.dto.TagDTO;
 import br.selftron.impinj.bridge.dto.TagsReadResultDTO;
 
 public class DefaultTagReportListener implements TagReportListener {
 	
 	private SimpMessagingTemplate template;
+	private ReaderConfigurationDTO configuration;
 	
-	public DefaultTagReportListener(SimpMessagingTemplate template) {
+	public DefaultTagReportListener(SimpMessagingTemplate template, ReaderConfigurationDTO configuration) {
 		this.template = template;
+		this.configuration = configuration;
 	}
 
     @Override
@@ -32,6 +35,6 @@ public class DefaultTagReportListener implements TagReportListener {
         }
         
         TagsReadResultDTO result = new TagsReadResultDTO(resultTags);
-        template.convertAndSend("/impinj/readout", result);        
+        template.convertAndSend("/impinj/" + configuration.getAddress(), result);        
     }
 }

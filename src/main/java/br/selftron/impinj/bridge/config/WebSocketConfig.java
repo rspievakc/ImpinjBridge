@@ -19,7 +19,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.enableSimpleBroker("/impinj");
         
         // Message(s) received with one of those below destinationPrefixes will be automatically router to controllers @MessageMapping
-        config.setApplicationDestinationPrefixes("/config");
+        // config.setApplicationDestinationPrefixes("/config");
     }
 
     @Override
